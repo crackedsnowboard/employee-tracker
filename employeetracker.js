@@ -60,3 +60,31 @@ function start() {
         });
 }
 
+function viewEmployees () {
+    console.log('inside viewEmployees');
+}
+
+function viewEmployeesDepartment () {
+    console.log("inside viewEmployeesDeparment");
+}
+
+function viewEmployeesManager () {
+    console.log("yo! viewEmployeesManager here");
+}
+
+function addEmployee () {
+    console.log("addEmployee");
+}
+
+function removeEmployee () {
+    console.log("remove employee");
+}
+
+function updateEmployeeRole () {
+    console.log("woohoo!");
+}
+
+function updateEmployeeManager () {
+    console.log("mic check!");
+}
+
