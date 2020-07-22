@@ -24,9 +24,13 @@ function start() {
             message: "What would you like to do?",
             choices: [
                 "View All Employees",
+                "View All Departments",
+                "View All Roles",
                 "View All Employees By Department",
                 "View All Employees By Manager",
                 "Add Employee",
+                "Add Department",
+                "Add Role",
                 "Remove Employee",
                 "Update Employee Role",
                 "Update Employee Manager"
@@ -37,6 +41,12 @@ function start() {
                 case "View All Employees":
                     viewEmployees();
                     break;
+                case "View All Departments":
+                    viewDepartments();
+                    break;   
+                case "View All Roles":
+                    viewRoles();
+                    break;   
                 case "View All Employees By Department":
                     viewEmployeesDepartment();
                     break;
@@ -45,6 +55,12 @@ function start() {
                     break;
                 case "Add Employee":
                     addEmployee();
+                    break;
+                case "Add Department":
+                    addDepartment();
+                    break;
+                case "Add Role":
+                    addRole();
                     break;
                 case "Remove Employee":
                     removeEmployee();
@@ -61,6 +77,26 @@ function start() {
 
 function viewEmployees() {
     console.log('inside viewEmployees');
+    connection.query("SELECT * FROM employee", function(err, results) {
+        if (err) throw err;
+        console.table(results);
+    })
+}
+
+function viewDepartments() {
+    console.log("this or that");
+    connection.query("SELECT * FROM department", function(err, results) {
+        if (err) throw err;
+        console.table(results);
+    })
+}
+
+function viewRoles() {
+    console.log("mouse");
+    connection.query("SELECT * FROM roles", function(err, results) {
+        if (err) throw err;
+        console.table(results);
+    })
 }
 
 function viewEmployeesDepartment() {
@@ -121,6 +157,72 @@ function addEmployee() {
 
             });
     });
+}
+
+function addDepartment() {
+    console.log("Scenario!");
+    connection.query("SELECT * FROM department", function (err, results) {
+        inquirer
+            .prompt([
+                {
+                    name: "department",
+                    type: "input",
+                    message: "What is the department you want add?"
+                }
+            ]).then(function (answer) {
+                connection.query(
+                    "INSERT INTO department SET ?",
+                    {
+                        name_department: answer.department
+                    },
+                    function(err) {
+                        if (err) throw err;
+                        console.log("deparment updated!");
+                        start();
+                    }
+                );
+
+            });
+    });
+}
+
+function addRole() {
+    console.log("Fife");
+    connection.query("SELECT * FROM roles", function (err, results) {
+        inquirer
+            .prompt([
+                {
+                    name: "title",
+                    type: "input",
+                    message: "What is the title of the role you want add?"
+                },
+                {
+                    name: "salary",
+                    type: "input",
+                    message: "What is the salary of the role you want add?"
+                },
+                {
+                    name: "department",
+                    type: "input",
+                    message: "What department is the role in?"
+                }
+            ]).then(function (answer) {
+                connection.query(
+                    "INSERT INTO department SET ?",
+                    {
+                        title: answer.title,
+                        salary: answer.salary,
+                        department_id: answer.department,
+                    },
+                    function(err) {
+                        if (err) throw err;
+                        console.log("deparment updated!");
+                        start();
+                    }
+                );
+
+            });
+    }); 
 }
 
 function removeEmployee() {
