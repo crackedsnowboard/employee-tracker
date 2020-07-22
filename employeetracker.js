@@ -17,7 +17,6 @@ connection.connect(function (err) {
 })
 
 function start() {
-    console.log("inside start");
     inquirer
         .prompt({
             name: "action",
@@ -60,31 +59,79 @@ function start() {
         });
 }
 
-function viewEmployees () {
+function viewEmployees() {
     console.log('inside viewEmployees');
 }
 
-function viewEmployeesDepartment () {
+function viewEmployeesDepartment() {
     console.log("inside viewEmployeesDeparment");
 }
 
-function viewEmployeesManager () {
+function viewEmployeesManager() {
     console.log("yo! viewEmployeesManager here");
 }
 
-function addEmployee () {
+function addEmployee() {
     console.log("addEmployee");
+    connection.query("SELECT * FROM employee", function (err, results) {
+        inquirer
+            .prompt([
+                {
+                    name: "firstName",
+                    type: "input",
+                    message: "What is the employee's first name?"
+                },
+                {
+                    name: "lastName",
+                    type: "input",
+                    message: "What is the employee's last name?"
+                },
+                {
+                    name: "role",
+                    type: "input",
+                    message: "What is the employee's role?"
+                },
+                {
+                    name: "manager",
+                    type: "rawlist",
+                    choices: function () {
+                        var choiceArray = [];
+                        for (var i = 0; i < results.length; i++) {
+                            choiceArray.push(results[i].manager_id);
+                        }
+                        return choiceArray;
+            },
+            message: "Who is the employee's manager?"
+                }
+            ]).then(function (answer) {
+                connection.query(
+                    "INSERT INTO employee SET ?",
+                    {
+                        first_name: answer.firstName,
+                        last_name: answer.lastName,
+                        role_id: answer.role,
+                        manager_id: answer.manager,
+                    },
+                    function(err) {
+                        if (err) throw err;
+                        console.log("employee updated!");
+                        start();
+                    }
+                );
+
+            });
+    });
 }
 
-function removeEmployee () {
+function removeEmployee() {
     console.log("remove employee");
 }
 
-function updateEmployeeRole () {
+function updateEmployeeRole() {
     console.log("woohoo!");
 }
 
-function updateEmployeeManager () {
+function updateEmployeeManager() {
     console.log("mic check!");
 }
 
