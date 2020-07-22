@@ -80,6 +80,7 @@ function viewEmployees() {
     connection.query("SELECT * FROM employee", function (err, results) {
         if (err) throw err;
         console.table(results);
+        start();
     })
 }
 
@@ -88,6 +89,7 @@ function viewDepartments() {
     connection.query("SELECT * FROM department", function (err, results) {
         if (err) throw err;
         console.table(results);
+        start();
     })
 }
 
@@ -96,6 +98,7 @@ function viewRoles() {
     connection.query("SELECT * FROM roles", function (err, results) {
         if (err) throw err;
         console.table(results);
+        start();
     })
 }
 
@@ -151,6 +154,7 @@ function addEmployee() {
                     function (err) {
                         if (err) throw err;
                         console.log("employee updated!");
+                        // console.table(results);
                         start();
                     }
                 );
@@ -227,6 +231,36 @@ function addRole() {
 
 function removeEmployee() {
     console.log("remove employee");
+    connection.query("SELECT * FROM employee", function (err, results) {
+        inquirer
+            .prompt([
+                {
+                    name: "employeeID",
+                    type: "rawlist",
+                    choices: function () {
+                        var choiceArray = [];
+                        for (var i = 0; i < results.length; i++) {
+                            choiceArray.push(results[i].id);
+                        }
+                        return choiceArray;
+                    },
+                    message: "Please select the employee's ID that you wish to remove?"
+
+                },
+            ]).then(function (answer) {
+                connection.query(
+                    "DELETE FROM employee WHERE ?",
+                    {
+                        id: answer.employeeID
+                    },
+                    function (err) {
+                        if (err) throw err;
+                        console.log("employee deleted!");
+                        start();
+                    }
+                );
+            });
+    })
 }
 
 function updateEmployeeRole() {
@@ -265,26 +299,26 @@ function updateEmployeeRole() {
             .then(function (answer) {
                 // var chosenItem;
                 // for (var i = 0; i < results.length; i++) {
-                    // if (results[i].id === answer.update) {
-                        connection.query(
-                            "UPDATE roles SET ? WHERE ?",
-                            [
-                                {
-                                    title: answer.title,
-                                    salary: answer.salary,
-                                    department_id: answer.department
-                                },
-                                {
-                                    id: answer.update
-                                }
-                            ],
-                            function (error) {
-                                if (error) throw err;
-                                console.log("This worked!");
-                                start();
-                            }
-                        );
-                    // }
+                // if (results[i].id === answer.update) {
+                connection.query(
+                    "UPDATE roles SET ? WHERE ?",
+                    [
+                        {
+                            title: answer.title,
+                            salary: answer.salary,
+                            department_id: answer.department
+                        },
+                        {
+                            id: answer.update
+                        }
+                    ],
+                    function (error) {
+                        if (error) throw err;
+                        console.log("This worked!");
+                        start();
+                    }
+                );
+                // }
                 // }
             });
     });
