@@ -7,6 +7,6 @@ INSERT INTO roles (title, salary, department_id)
 VALUES ("Software Dev", "200000", "701"), ("Manager", "150000", "725"), ("Intern", "40000", "780");
 
 INSERT INTO department (name_department)
-VALUEs ("Engineering"), ("Executive"), ("Operations");
+VALUES ("Engineering"), ("Executive"), ("Operations");
 
 

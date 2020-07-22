@@ -43,10 +43,10 @@ function start() {
                     break;
                 case "View All Departments":
                     viewDepartments();
-                    break;   
+                    break;
                 case "View All Roles":
                     viewRoles();
-                    break;   
+                    break;
                 case "View All Employees By Department":
                     viewEmployeesDepartment();
                     break;
@@ -77,7 +77,7 @@ function start() {
 
 function viewEmployees() {
     console.log('inside viewEmployees');
-    connection.query("SELECT * FROM employee", function(err, results) {
+    connection.query("SELECT * FROM employee", function (err, results) {
         if (err) throw err;
         console.table(results);
     })
@@ -85,7 +85,7 @@ function viewEmployees() {
 
 function viewDepartments() {
     console.log("this or that");
-    connection.query("SELECT * FROM department", function(err, results) {
+    connection.query("SELECT * FROM department", function (err, results) {
         if (err) throw err;
         console.table(results);
     })
@@ -93,7 +93,7 @@ function viewDepartments() {
 
 function viewRoles() {
     console.log("mouse");
-    connection.query("SELECT * FROM roles", function(err, results) {
+    connection.query("SELECT * FROM roles", function (err, results) {
         if (err) throw err;
         console.table(results);
     })
@@ -136,8 +136,8 @@ function addEmployee() {
                             choiceArray.push(results[i].manager_id);
                         }
                         return choiceArray;
-            },
-            message: "Who is the employee's manager?"
+                    },
+                    message: "Who is the employee's manager?"
                 }
             ]).then(function (answer) {
                 connection.query(
@@ -148,7 +148,7 @@ function addEmployee() {
                         role_id: answer.role,
                         manager_id: answer.manager,
                     },
-                    function(err) {
+                    function (err) {
                         if (err) throw err;
                         console.log("employee updated!");
                         start();
@@ -175,7 +175,7 @@ function addDepartment() {
                     {
                         name_department: answer.department
                     },
-                    function(err) {
+                    function (err) {
                         if (err) throw err;
                         console.log("deparment updated!");
                         start();
@@ -208,13 +208,13 @@ function addRole() {
                 }
             ]).then(function (answer) {
                 connection.query(
-                    "INSERT INTO department SET ?",
+                    "INSERT INTO roles SET ?",
                     {
                         title: answer.title,
                         salary: answer.salary,
                         department_id: answer.department,
                     },
-                    function(err) {
+                    function (err) {
                         if (err) throw err;
                         console.log("deparment updated!");
                         start();
@@ -222,7 +222,7 @@ function addRole() {
                 );
 
             });
-    }); 
+    });
 }
 
 function removeEmployee() {
@@ -230,7 +230,64 @@ function removeEmployee() {
 }
 
 function updateEmployeeRole() {
-    console.log("woohoo!");
+    connection.query("SELECT * FROM roles", function (err, results) {
+        if (err) throw err;
+        inquirer
+            .prompt([
+                {
+                    name: "update",
+                    type: "rawlist",
+                    choices: function () {
+                        var choiceArray = [];
+                        for (var i = 0; i < results.length; i++) {
+                            choiceArray.push(results[i].id);
+                        }
+                        return choiceArray;
+                    },
+                    message: "Which role would you like to update?"
+                },
+                {
+                    name: "title",
+                    type: "input",
+                    message: "What is the title of the role you want update?"
+                },
+                {
+                    name: "salary",
+                    type: "input",
+                    message: "What is the salary of the role you want update?"
+                },
+                {
+                    name: "department",
+                    type: "input",
+                    message: "What department is the updated role in?"
+                }
+            ])
+            .then(function (answer) {
+                // var chosenItem;
+                // for (var i = 0; i < results.length; i++) {
+                    // if (results[i].id === answer.update) {
+                        connection.query(
+                            "UPDATE roles SET ? WHERE ?",
+                            [
+                                {
+                                    id: answer.update
+                                },
+                                {
+                                    title: answer.title,
+                                    salary: answer.salary,
+                                    department_id: answer.department
+                                }
+                            ],
+                            function (error) {
+                                if (error) throw err;
+                                console.log("This worked!");
+                                start();
+                            }
+                        );
+                    }
+                }
+            });
+    });
 }
 
 function updateEmployeeManager() {
