@@ -270,12 +270,12 @@ function updateEmployeeRole() {
                             "UPDATE roles SET ? WHERE ?",
                             [
                                 {
-                                    id: answer.update
-                                },
-                                {
                                     title: answer.title,
                                     salary: answer.salary,
                                     department_id: answer.department
+                                },
+                                {
+                                    id: answer.update
                                 }
                             ],
                             function (error) {
@@ -284,8 +284,8 @@ function updateEmployeeRole() {
                                 start();
                             }
                         );
-                    }
-                }
+                    // }
+                // }
             });
     });
 }
