@@ -77,7 +77,7 @@ function start() {
 
 function viewEmployees() {
     console.log('inside viewEmployees');
-    connection.query("SELECT * FROM employee", function (err, results) {
+    connection.query("SELECT employee.first_name, employee.last_name, roles.title, roles.salary FROM employee LEFT JOIN roles on employee.id = roles.id;", function (err, results) {
         if (err) throw err;
         console.table(results);
         start();
@@ -87,6 +87,7 @@ function viewEmployees() {
 function viewDepartments() {
     console.log("this or that");
     connection.query("SELECT * FROM department", function (err, results) {
+        console.log(results);
         if (err) throw err;
         console.table(results);
         start();
