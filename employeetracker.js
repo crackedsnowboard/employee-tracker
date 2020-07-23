@@ -76,7 +76,7 @@ function start() {
 }
 
 function viewEmployees() {
-    connection.query("SELECT employee.first_name, employee.last_name, roles.title, roles.salary FROM employee LEFT JOIN roles on employee.id = roles.id;", function (err, results) {
+    connection.query("SELECT employee.first_name, employee.last_name, employee.manager_id, roles.title, roles.salary FROM employee LEFT JOIN roles on employee.id = roles.id;", function (err, results) {
         if (err) throw err;
         console.table(results);
         start();
@@ -150,13 +150,13 @@ function addEmployee() {
                     function (err) {
                         if (err) throw err;
                         console.log("employee updated!");
-                        
+
                     },
-                    
+
                 );
-                
+
             });
-        
+
     });
     start();
 }
@@ -260,6 +260,7 @@ function removeEmployee() {
 
 function updateEmployeeRole() {
     connection.query("SELECT * FROM roles", function (err, results) {
+        console.table(results);
         if (err) throw err;
         inquirer
             .prompt([
@@ -315,6 +316,47 @@ function updateEmployeeRole() {
 }
 
 function updateEmployeeManager() {
-    console.log("mic check!");
+    connection.query("SELECT * FROM employee", function (err, results) {
+        console.table(results)
+        if (err) throw err;
+        inquirer
+            .prompt([
+                {
+                    name: "update",
+                    type: "rawlist",
+                    choices: function () {
+                        var choiceArray = [];
+                        for (var i = 0; i < results.length; i++) {
+                            choiceArray.push(results[i].id);
+                        }
+                        return choiceArray;
+                    },
+                    message: "Select the employee id you would like to update?"
+                },
+                {
+                    name: "manager",
+                    type: "input",
+                    message: "Enter the new manager id?"
+                }
+            ])
+            .then(function (answer) {
+                connection.query(
+                    "UPDATE employee SET ? WHERE ?",
+                    [
+                        {
+                            manager_id: answer.manager
+                        },
+                        {
+                            id: answer.update
+                        }
+                    ],
+                    function (error) {
+                        if (error) throw err;
+                        console.log("Manager updated. Now get to work!");
+                        start();
+                    }
+                );
+            });
+    });
 }
 

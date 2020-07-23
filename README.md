@@ -2,7 +2,7 @@
 I am builiding a command line application that will use a MySQL database to create and track employees. The purpose of this excercise is to build CRUD (create, read, update, delete) skills using SQL statements to interact with stored data.  
 
 ## User Story
-As a business owner, I want to be able to view and manage the departments, roles, and employees in my company, so that I can organize and plan my business
+As a business owner, I want to be able to view and manage the departments, roles, and employees in my company, so that I can organize and plan my business.
 
 
 * Employee table will have a unique id, first name, last name, rode ID, and manager ID.
@@ -30,11 +30,10 @@ function viewEmployees() {
 }
 ```
 
-### Link to deployed Team Profile generator
+### Link to deployed Employee Tracker
 [Employee-Tracker](https://github.com/crackedsnowboard/employee-tracker)
 
 #### GIF of Applicaton
-
 ![App](https://media.giphy.com/media/ifSwVbb5ci6NgekwtH/giphy.gif)
 
 
