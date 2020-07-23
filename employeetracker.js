@@ -76,7 +76,6 @@ function start() {
 }
 
 function viewEmployees() {
-    console.log('inside viewEmployees');
     connection.query("SELECT employee.first_name, employee.last_name, roles.title, roles.salary FROM employee LEFT JOIN roles on employee.id = roles.id;", function (err, results) {
         if (err) throw err;
         console.table(results);
@@ -85,9 +84,7 @@ function viewEmployees() {
 }
 
 function viewDepartments() {
-    console.log("this or that");
     connection.query("SELECT * FROM department", function (err, results) {
-        console.log(results);
         if (err) throw err;
         console.table(results);
         start();
@@ -95,7 +92,6 @@ function viewDepartments() {
 }
 
 function viewRoles() {
-    console.log("mouse");
     connection.query("SELECT * FROM roles", function (err, results) {
         if (err) throw err;
         console.table(results);
@@ -112,7 +108,6 @@ function viewEmployeesManager() {
 }
 
 function addEmployee() {
-    console.log("addEmployee");
     connection.query("SELECT * FROM employee", function (err, results) {
         inquirer
             .prompt([
@@ -155,17 +150,18 @@ function addEmployee() {
                     function (err) {
                         if (err) throw err;
                         console.log("employee updated!");
-                        // console.table(results);
-                        start();
-                    }
+                        
+                    },
+                    
                 );
-
+                
             });
+        
     });
+    start();
 }
 
 function addDepartment() {
-    console.log("Scenario!");
     connection.query("SELECT * FROM department", function (err, results) {
         inquirer
             .prompt([
@@ -192,7 +188,6 @@ function addDepartment() {
 }
 
 function addRole() {
-    console.log("Fife");
     connection.query("SELECT * FROM roles", function (err, results) {
         inquirer
             .prompt([
@@ -231,7 +226,6 @@ function addRole() {
 }
 
 function removeEmployee() {
-    console.log("remove employee");
     connection.query("SELECT * FROM employee", function (err, results) {
         inquirer
             .prompt([
@@ -298,9 +292,6 @@ function updateEmployeeRole() {
                 }
             ])
             .then(function (answer) {
-                // var chosenItem;
-                // for (var i = 0; i < results.length; i++) {
-                // if (results[i].id === answer.update) {
                 connection.query(
                     "UPDATE roles SET ? WHERE ?",
                     [
@@ -319,8 +310,6 @@ function updateEmployeeRole() {
                         start();
                     }
                 );
-                // }
-                // }
             });
     });
 }

@@ -1,90 +1,44 @@
 # Using MySQL to track employees
-I am builiding a node.js script that will generate a template for a our teams profile that will be displayed in HTML. This should help us have relevenat bio information for our team displayed in a user friendly format as we continue to add additional team members. 
+I am builiding a command line application that will use a MySQL database to create and track employees. The purpose of this excercise is to build CRUD (create, read, update, delete) skills using SQL statements to interact with stored data.  
 
 ## User Story
-As a manager, I want to generate a webpage that displays my team's basic info so that I have quick access to emails and GitHub profiles.
+As a business owner, I want to be able to view and manage the departments, roles, and employees in my company, so that I can organize and plan my business
 
-* Every user will have their name, email, and ID number displayed
-* Managers will also have their office number displayed
-* Engineers will also have their Github pages linked
-* Interns will also have their school displayed
+
+* Employee table will have a unique id, first name, last name, rode ID, and manager ID.
+* Roles table will have id, title, salary, and department ID
+* Departments table will have an id and the name of the department 
 
 ## Installation
-I used node.js to automate the generation of a team profile using the inquier libary to capture user input from the command line. 
+I used MySQL to store the data and node.js to build the command line interface using the inquirer library. 
 
 Check out inquirer [Inquirer](https://www.npmjs.com/package/inquirer)
-and File Service [FSwrite-node](https://nodejs.org/api/fs.html)
+and node [Node](https://nodejs.org/en/)
+and MySQL [MySQL](https://dev.mysql.com/doc/)
 
-A few key code snippets that helped to build the program:
+## Key Code Snippets
+A few key SQL queries that helped display data in the format desired: 
 
-Using the switch case in the app.js file
+A left join to bring together different elements from disparate tables was the highlight of my SQL learning. 
 ```
-inquirer
-        .prompt([
-            {
-                type: "list",
-                message: "What is your role?",
-                name: "teamGenerator",
-                choices: ["Manager", "Engineer", "Intern", "Done"]
-            },
-        ]).then(teamMember => {
-            switch (teamMember.teamGenerator) {
-                case "Engineer":
-                    engineer();
-                    break;
-                case "Manager":
-                    manager();
-                    break;
-                case "Intern":
-                    intern();
-                    break;
-                case "Done":
-                    createTeamList();
-                    break;
+function viewEmployees() {
+    connection.query("SELECT employee.first_name, employee.last_name, roles.title, roles.salary FROM employee LEFT JOIN roles on employee.id = roles.id;", function (err, results) {
+        if (err) throw err;
+        console.table(results);
+        start();
+    })
+}
 ```
-
-Using a file service library of node.js in app.js to render the collected information to our html file. 
-```
-function createTeamList () {
-     if(!fs.existsSync(OUTPUT_DIR)){
-         fs.mkdirSync(OUTPUT_DIR)
-     }
-     fs.writeFileSync(outputPath, render(createTeam), "utf-8");
-     }
-```
-
-OOP programming with class and extends in Employee.js file
-```
- class Employee {
-    constructor(name, id, email) {
-        this.name = name
-        this.id = id
-        this.email = email
-    }
-    getName() {
-        return this.name
-    }
-    getId() {
-        return this.id
-    
-```
-
 
 ### Link to deployed Team Profile generator
-[Team-Generator](https://github.com/crackedsnowboard/team-profile)
+[Employee-Tracker](https://github.com/crackedsnowboard/employee-tracker)
 
 #### GIF of Applicaton
 
-![App](https://media.giphy.com/media/kFBWbKJlNNzQBVVAe3/giphy.gif)
+![App](https://media.giphy.com/media/ifSwVbb5ci6NgekwtH/giphy.gif)
 
 
 #### Author Links
 [LinkedIn](linkedin.com/in/joel-mathen/) <br>
 [GitHub](https://github.com/crackedsnowboard)
 
-
-
-
-
-
-View and interact with information stored in MySQL database
